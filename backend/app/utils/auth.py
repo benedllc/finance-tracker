@@ -1,7 +1,7 @@
 import jwt
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import request, jsonify, current_app
+from flask import request, jsonify, current_app, g
 from app.models import User
 
 
@@ -42,7 +42,10 @@ def decode_token(token):
 
 
 def token_required(f):
-    """Decorator to protect routes with JWT authentication"""
+    """
+    Decorator to protect routes with JWT authentication
+    Supports both old local JWT and new Keycloak JWT tokens
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         token = None
@@ -58,7 +61,49 @@ def token_required(f):
         if not token:
             return jsonify({'error': 'Authentication token is missing'}), 401
         
-        # Decode token
+        # First try Keycloak token verification
+        try:
+            from app.utils.keycloak import verify_keycloak_token
+            from app.database import get_db
+            
+            keycloak_user = verify_keycloak_token(token)
+            if keycloak_user:
+                # Get user from database by keycloak_id
+                with get_db() as db:
+                    cursor = db.execute(
+                        'SELECT * FROM users WHERE keycloak_id = ?',
+                        (keycloak_user['sub'],)
+                    )
+                    db_user = cursor.fetchone()
+                
+                    if db_user:
+                        # Create a user-like object for compatibility
+                        class UserWrapper:
+                            def __init__(self, row):
+                                self.id = row['id']
+                                self.keycloak_id = row['keycloak_id']
+                                self.email = row['email']
+                                self.username = row['username']
+                                self.full_name = row['full_name']
+                                self.role = row['role']
+                            
+                            def to_dict(self):
+                                return {
+                                    'id': self.id,
+                                    'keycloak_id': self.keycloak_id,
+                                    'email': self.email,
+                                    'username': self.username,
+                                    'full_name': self.full_name,
+                                    'role': self.role
+                                }
+                        
+                        user = UserWrapper(db_user)
+                        g.keycloak_user = keycloak_user
+                        return f(user, *args, **kwargs)
+        except Exception as e:
+            print(f"Keycloak auth failed, trying local JWT: {e}")
+        
+        # Fall back to old local JWT verification
         payload = decode_token(token)
         if not payload:
             return jsonify({'error': 'Invalid or expired token'}), 401

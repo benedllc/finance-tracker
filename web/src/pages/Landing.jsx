@@ -4,27 +4,22 @@ import { useAuth } from '../context/AuthContext'
 import './Landing.css'
 
 function Landing() {
-  const { user } = useAuth()
+  const { user, login } = useAuth()
 
   return (
     <div className="landing-container">
       <header className="landing-header">
         <nav className="nav">
-          <h1 className="logo">NFApps</h1>
+          <h1 className="logo">BENED Finance</h1>
           <div className="nav-links">
             {user ? (
-              <Link to="/dashboard" className="btn btn-primary">
-                Go to Dashboard
+              <Link to="/finance" className="btn btn-primary">
+                Go to Finance
               </Link>
             ) : (
-              <>
-                <Link to="/login" className="btn btn-secondary">
-                  Login
-                </Link>
-                <Link to="/signup" className="btn btn-primary">
-                  Sign Up
-                </Link>
-              </>
+              <button onClick={login} className="btn btn-primary">
+                Sign In
+              </button>
             )}
           </div>
         </nav>
@@ -32,55 +27,52 @@ function Landing() {
 
       <main className="landing-main">
         <section className="hero">
-          <h1 className="hero-title">Welcome to NFApps</h1>
+          <h1 className="hero-title">BENED Finance Tracker</h1>
           <p className="hero-subtitle">
-            Your unified platform for seamless web and mobile experiences
+            Track your finances, manage receipts, and stay on budget
           </p>
           <p className="hero-description">
-            Built with a powerful Flask backend and modern React frontends,
-            NFApps provides a scalable foundation for your applications
+            A simple and powerful tool to manage your personal finances,
+            track transactions, and organize receipts with OCR technology
           </p>
           {!user && (
             <div className="hero-actions">
-              <Link to="/signup" className="btn btn-primary btn-large">
+              <button onClick={login} className="btn btn-primary btn-large">
                 Get Started
-              </Link>
-              <Link to="/login" className="btn btn-outline btn-large">
-                Sign In
-              </Link>
+              </button>
             </div>
           )}
         </section>
 
         <section className="features">
-          <h2 className="features-title">Platform Features</h2>
+          <h2 className="features-title">Features</h2>
           <div className="features-grid">
             <div className="feature-card">
+              <div className="feature-icon">💰</div>
+              <h3>Track Transactions</h3>
+              <p>Log income and expenses across multiple accounts</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">📄</div>
+              <h3>Receipt OCR</h3>
+              <p>Upload receipts and extract data automatically</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">📊</div>
+              <h3>Analytics</h3>
+              <p>Visualize spending patterns and trends</p>
+            </div>
+            <div className="feature-card">
               <div className="feature-icon">🔐</div>
-              <h3>Secure Authentication</h3>
-              <p>JWT-based authentication ensuring secure access across all platforms</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🌐</div>
-              <h3>Cross-Platform</h3>
-              <p>Unified experience across web and mobile applications</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">⚡</div>
-              <h3>Fast & Scalable</h3>
-              <p>Built on modern technologies for optimal performance</p>
-            </div>
-            <div className="feature-card">
-              <div className="feature-icon">🔧</div>
-              <h3>Modular Architecture</h3>
-              <p>Clean separation of concerns for easy maintenance and growth</p>
+              <h3>Secure</h3>
+              <p>Your data is protected with enterprise-grade security</p>
             </div>
           </div>
         </section>
       </main>
 
       <footer className="landing-footer">
-        <p>&copy; 2025 NFApps. All rights reserved.</p>
+        <p>&copy; 2026 BENED. All rights reserved.</p>
       </footer>
     </div>
   )

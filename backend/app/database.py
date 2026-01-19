@@ -22,11 +22,12 @@ def init_db(db_path):
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                keycloak_id TEXT UNIQUE,
                 email TEXT UNIQUE NOT NULL,
                 username TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
+                password_hash TEXT,
                 full_name TEXT,
-                role TEXT DEFAULT 'member' CHECK(role IN ('admin', 'member', 'graduate', 'staff')),
+                role TEXT DEFAULT 'member' CHECK(role IN ('admin', 'member', 'graduate', 'staff', 'user')),
                 status TEXT DEFAULT 'active' CHECK(status IN ('active', 'inactive', 'suspended')),
                 program_start_date DATE,
                 graduation_date DATE,

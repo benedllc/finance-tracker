@@ -147,7 +147,7 @@ function Profile() {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="dashboard-nav">
-          <h1 className="dashboard-logo">NFApps</h1>
+          <h1 className="dashboard-logo">BENED</h1>
           <nav className="dashboard-links">
             <Link to="/dashboard" className="nav-link">
               Dashboard

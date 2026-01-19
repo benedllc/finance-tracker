@@ -20,11 +20,14 @@ def create_app(config_name='default'):
     init_db(app.config['DATABASE_PATH'])
     
     # Register blueprints
-    from app.routes import auth, user, admin
+    from app.routes.auth_keycloak import bp as auth_bp
+    from app.routes.user_keycloak import bp as user_bp
+    from app.routes.admin import bp as admin_bp
     from app.routes.finance import finance_bp
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(user.bp)
-    app.register_blueprint(admin.bp)
+    
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(admin_bp)
     app.register_blueprint(finance_bp, url_prefix='/api/finance')
     
     # Health check endpoint

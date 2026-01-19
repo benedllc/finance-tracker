@@ -1,6 +1,18 @@
 import axios from 'axios'
 
-const API_BASE_URL = 'http://localhost:5000/api'
+// Use environment variable or default to relative path for production
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api'
+
+// Export base URL for image paths
+export const getImageUrl = (path) => {
+  if (!path) return ''
+  // In production, images are served from the same domain
+  if (import.meta.env.PROD) {
+    return path.startsWith('/') ? path : `/${path}`
+  }
+  // In development, use localhost
+  return `http://localhost:5000${path.startsWith('/') ? path : `/${path}`}`
+}
 
 // Create axios instance
 const api = axios.create({

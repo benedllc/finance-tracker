@@ -6,6 +6,11 @@ from app.utils.auth import (
     validate_password,
     validate_username
 )
+from app.utils.keycloak import (
+    keycloak_required,
+    verify_keycloak_token,
+    get_keycloak_config
+)
 
 __all__ = [
     'generate_token',
@@ -13,5 +18,8 @@ __all__ = [
     'token_required',
     'validate_email',
     'validate_password',
-    'validate_username'
+    'validate_username',
+    'keycloak_required',
+    'verify_keycloak_token',
+    'get_keycloak_config'
 ]

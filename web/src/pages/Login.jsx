@@ -40,7 +40,7 @@ function Login() {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1 className="auth-logo">NFApps</h1>
+          <h1 className="auth-logo">BENED</h1>
           <h2 className="auth-title">Welcome Back</h2>
           <p className="auth-subtitle">Sign in to your account</p>
         </div>

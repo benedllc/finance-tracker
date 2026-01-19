@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { financeAPI } from '../services/api'
+import { financeAPI, getImageUrl } from '../services/api'
 import './Dashboard.css'
 import './Finance.css'
 
@@ -786,7 +786,7 @@ function Finance() {
       <div className="dashboard-container">
         <header className="dashboard-header">
           <div className="dashboard-nav">
-            <h1 className="dashboard-logo">NFApps Finance</h1>
+            <h1 className="dashboard-logo">BENED Finance</h1>
           </div>
         </header>
         <main className="dashboard-main">
@@ -800,7 +800,7 @@ function Finance() {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="dashboard-nav">
-          <h1 className="dashboard-logo">NFApps</h1>
+          <h1 className="dashboard-logo">BENED</h1>
           <nav className="dashboard-links">
             <Link to="/dashboard" className="nav-link">
               Dashboard
@@ -1207,7 +1207,7 @@ function Finance() {
                         >
                           {fileInfo.isImage ? (
                             <img 
-                              src={`http://localhost:5000${linkedReceipt.image_url}`}
+                              src={getImageUrl(linkedReceipt.image_url)}
                               alt="Receipt"
                               style={{ 
                                 width: '100%', 
@@ -1307,7 +1307,7 @@ function Finance() {
                           .filter(r => !transactions.some(t => t.receipt_id === r.id))
                           .map((receipt, index) => {
                             const imageUrl = receipt.image_url || `/${receipt.file_path}`;
-                            const fullUrl = `http://localhost:5000${imageUrl}`;
+                            const fullUrl = getImageUrl(imageUrl);
                             const fileInfo = getFileTypeInfo(receipt.file_name);
                             const displayName = getReceiptDisplayName(receipt, receipts);
                             
@@ -1506,7 +1506,7 @@ function Finance() {
                           })
                           .map((receipt) => {
                             const imageUrl = receipt.image_url || `/${receipt.file_path}`;
-                            const fullUrl = `http://localhost:5000${imageUrl}`;
+                            const fullUrl = getImageUrl(imageUrl);
                             const fileInfo = getFileTypeInfo(receipt.file_name);
                             const linkedTransaction = transactions.find(t => t.receipt_id === receipt.id);
                             const displayName = getReceiptDisplayName(receipt, receipts);
@@ -1778,7 +1778,7 @@ function Finance() {
             }}>
               {getFileTypeInfo(selectedReceiptToLink.file_name).isImage ? (
                 <img 
-                  src={`http://localhost:5000${selectedReceiptToLink.image_url}`}
+                  src={getImageUrl(selectedReceiptToLink.image_url)}
                   alt={selectedReceiptToLink.file_name}
                   style={{ 
                     width: '60px', 
@@ -2062,7 +2062,7 @@ function Finance() {
               }}>
                 {getFileTypeInfo(selectedReceiptToLink.file_name).isImage ? (
                   <img 
-                    src={`http://localhost:5000${selectedReceiptToLink.image_url}`}
+                    src={getImageUrl(selectedReceiptToLink.image_url)}
                     alt={selectedReceiptToLink.file_name}
                     style={{ 
                       width: '40px', 
@@ -2206,7 +2206,7 @@ function Finance() {
                             <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '4px' }}>Preview:</div>
                             {fileInfo.isImage ? (
                               <img 
-                                src={`http://localhost:5000${selectedReceipt.image_url}`}
+                                src={getImageUrl(selectedReceipt.image_url)}
                                 alt="Receipt preview"
                                 style={{ 
                                   maxWidth: '100%', 
@@ -2422,7 +2422,7 @@ function Finance() {
             {(() => {
               const fileInfo = getFileTypeInfo(selectedReceiptImage.file_name)
               const imageUrl = selectedReceiptImage.image_url || `/${selectedReceiptImage.file_path}`
-              const fullUrl = `http://localhost:5000${imageUrl}`
+              const fullUrl = getImageUrl(imageUrl)
               
               if (fileInfo.isImage) {
                 return (
@@ -2562,7 +2562,7 @@ function Finance() {
             <div style={{ padding: '24px' }}>
               {(() => {
                 const imageUrl = selectedReceiptDetail.image_url || `/${selectedReceiptDetail.file_path}`
-                const fullUrl = `http://localhost:5000${imageUrl}`
+                const fullUrl = getImageUrl(imageUrl)
                 const fileInfo = getFileTypeInfo(selectedReceiptDetail.file_name)
                 
                 return (

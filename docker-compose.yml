@@ -1,0 +1,56 @@
+# Finance Tracker - Production Docker Compose
+# Joins existing bened-platform network on VPS
+# Deploy: docker-compose up -d --build
+
+version: '3.8'
+
+services:
+  finance-tracker-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: finance-tracker-api
+    ports:
+      - "5001:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=run.py
+      - PORT=5000
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - finance-tracker-db:/app/data
+    networks:
+      - bened-platform_bened-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+
+  finance-tracker-web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=https://finance.beneficialeducationworks.com/api
+    container_name: finance-tracker-web
+    ports:
+      - "3004:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - finance-tracker-api
+    networks:
+      - bened-platform_bened-network
+    restart: unless-stopped
+
+networks:
+  bened-platform_bened-network:
+    external: true
+
+volumes:
+  finance-tracker-db:

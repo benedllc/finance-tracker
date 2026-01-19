@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import axios from 'axios'
+import api from '../services/api'
 import './Dashboard.css'
 import './Admin.css'
 
@@ -30,10 +30,7 @@ function AdminUsers() {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      const token = localStorage.getItem('token')
-      const response = await axios.get('http://localhost:5000/api/admin/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      const response = await api.get('/admin/users')
       setUsers(response.data.users)
       setFilteredUsers(response.data.users)
       setError('')
@@ -107,12 +104,7 @@ function AdminUsers() {
 
   const handleSaveUser = async () => {
     try {
-      const token = localStorage.getItem('token')
-      await axios.put(
-        `http://localhost:5000/api/admin/users/${editingUser.id}`,
-        editingUser,
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
+      await api.put(`/admin/users/${editingUser.id}`, editingUser)
       setEditingUser(null)
       fetchUsers()
     } catch (err) {
@@ -126,10 +118,7 @@ function AdminUsers() {
     }
 
     try {
-      const token = localStorage.getItem('token')
-      await axios.delete(`http://localhost:5000/api/admin/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      await api.delete(`/admin/users/${userId}`)
       fetchUsers()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to deactivate user')
@@ -160,7 +149,7 @@ function AdminUsers() {
       <div className="dashboard-container">
         <header className="dashboard-header">
           <div className="dashboard-nav">
-            <h1 className="dashboard-logo">NFApps Admin</h1>
+            <h1 className="dashboard-logo">BENED Admin</h1>
           </div>
         </header>
         <main className="dashboard-main">
@@ -174,7 +163,7 @@ function AdminUsers() {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <div className="dashboard-nav">
-          <h1 className="dashboard-logo">NFApps Admin</h1>
+          <h1 className="dashboard-logo">BENED Admin</h1>
           <nav className="dashboard-links">
             <Link to="/dashboard" className="nav-link">
               Dashboard
